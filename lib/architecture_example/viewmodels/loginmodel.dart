@@ -8,12 +8,12 @@ import '../locator.dart';
 
 class LoginModel extends BaseModel {
   final AuthenticationService _authenticationService = locator<AuthenticationService>();
-
     Future<bool> login() async {
     setState(ViewState.Busy);
 
     var success = await _authenticationService.login('a@a.com','123456');
 
+  
     setState(ViewState.Idle);
     return success;
   }

@@ -12,7 +12,10 @@ class LoginView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseView<LoginModel>(
         builder: (context, model, child) => Scaffold(
-            body: model.state == ViewState.Busy
+            body: 
+           // model.logged == true ?  HomeView() :
+
+            model.state == ViewState.Busy
                 ? Center(child: CircularProgressIndicator())
                 : Center(
                   child: FlatButton(
@@ -20,11 +23,10 @@ class LoginView extends StatelessWidget {
                       onPressed: () async {
                         var loginSuccess = await model.login();
                         if (loginSuccess) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) => HomeView()),
-                          );
-                         String username =   Provider.of<User>(context, listen: false).name;
-                         print('Login ok $username');
+                          //model.logged = true;
+                          Navigator.of(context).push( MaterialPageRoute(builder: (context) => HomeView()), );
+                        // String username =   Provider.of<User>(context, listen: false).name;
+                        // print('Login ok $username');
                         }
                       }),
                 )));

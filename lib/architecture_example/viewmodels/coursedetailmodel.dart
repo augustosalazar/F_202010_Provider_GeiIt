@@ -11,7 +11,7 @@ class CourseDetailModel extends BaseModel {
   CourseDetail courseDetail;
 
   Future getCourse(
-      String user, String token, int courseId) async {
+    String user, String token, int courseId) async {
     setState(ViewState.Busy);
     courseDetail = await _api.getCourse(user, token, courseId);
     setState(ViewState.Idle);

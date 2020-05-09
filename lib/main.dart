@@ -15,6 +15,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamProvider<User>(
+      updateShouldNotify: (_, __) {
+                print('updateShouldNotify');
+                return true;
+              },
       initialData: User.initial(),
       create: (BuildContext context) =>
           locator<AuthenticationService>().userController.stream,
@@ -25,3 +29,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
