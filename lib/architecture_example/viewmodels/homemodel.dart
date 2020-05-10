@@ -12,7 +12,9 @@ class HomeModel extends BaseModel {
 
   Future getCourses(String user, String token) async {
     setState(ViewState.Busy);
-    await _couseService.getCourses(user, token);
+    _couseService.getCourses(user, token).catchError((error) {
+        return Future.error(error);
+      });
     setState(ViewState.Idle);
   }
 

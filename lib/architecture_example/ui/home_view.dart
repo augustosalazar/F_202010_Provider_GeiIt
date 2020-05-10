@@ -9,25 +9,25 @@ import 'package:provider/provider.dart';
 class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return 
-     BaseView<HomeModel>(
-        onModelReady: (model) => model.getCourses(
-            Provider.of<AuthProvider>(context).username,
-            Provider.of<AuthProvider>(context).token),
+    return BaseView<HomeModel>(
+        onModelReady: (model) => model
+                .getCourses(Provider.of<AuthProvider>(context).username,
+                    Provider.of<AuthProvider>(context).token)
+                .catchError((error) {
+              Provider.of<AuthProvider>(context, listen: false).setLogOut();
+            }),
         builder: (context, model, child) => Scaffold(
             appBar: AppBar(
               title: Text("Home"),
-
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.exit_to_app),
-            onPressed: () {
-              Provider.of<AuthProvider>(context, listen: false).setLogOut();
-            },
-          ),
-        ],
-
-
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.exit_to_app),
+                  onPressed: () {
+                    Provider.of<AuthProvider>(context, listen: false)
+                        .setLogOut();
+                  },
+                ),
+              ],
             ),
             floatingActionButton: floating(context, model),
             body: model.state == ViewState.Busy

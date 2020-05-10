@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CourseDetailView extends StatelessWidget {
-  int courseId;
+  final int courseId;
   CourseDetailView({this.courseId});
   @override
   Widget build(BuildContext context) {
