@@ -7,8 +7,8 @@ import 'api.dart';
 
 class AuthenticationService {
   Api _api = locator<Api>();
-
-  StreamController<User> userController = StreamController<User>();
+  User user;
+ // StreamController<User> userController = StreamController<User>();
 
   Future<bool> login(String email, String password) async {
     User fetchedUser = await _api.getUserProfile(email: email, password: password);
@@ -16,10 +16,15 @@ class AuthenticationService {
     var hasUser = fetchedUser != null;
     if(hasUser) {
       print('Got user token ${fetchedUser.token}');
-      userController.add(fetchedUser);
+      //userController.add(fetchedUser);
+      user = fetchedUser;
     }
 
     return hasUser;
+  }
+
+    Future<bool> logout() async {
+    return Future.value(true);
   }
 
 }

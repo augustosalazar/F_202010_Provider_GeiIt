@@ -1,7 +1,7 @@
 import 'package:f_202010_provider_get_it/architecture_example/base/base_model.dart';
 import 'package:f_202010_provider_get_it/architecture_example/base/base_view.dart';
-import 'package:f_202010_provider_get_it/architecture_example/models/user.dart';
 import 'package:f_202010_provider_get_it/architecture_example/ui/course_detail.dart';
+import 'package:f_202010_provider_get_it/architecture_example/viewmodels/auth_provider.dart';
 import 'package:f_202010_provider_get_it/architecture_example/viewmodels/homemodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,15 +9,25 @@ import 'package:provider/provider.dart';
 class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Provider.of<User>(context).username == "" ?
-     Center(child: Text("?")) :
+    return 
      BaseView<HomeModel>(
         onModelReady: (model) => model.getCourses(
-            Provider.of<User>(context).username,
-            Provider.of<User>(context).token),
+            Provider.of<AuthProvider>(context).username,
+            Provider.of<AuthProvider>(context).token),
         builder: (context, model, child) => Scaffold(
             appBar: AppBar(
               title: Text("Home"),
+
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            onPressed: () {
+              Provider.of<AuthProvider>(context, listen: false).setLogOut();
+            },
+          ),
+        ],
+
+
             ),
             floatingActionButton: floating(context, model),
             body: model.state == ViewState.Busy
@@ -28,7 +38,7 @@ class HomeView extends StatelessWidget {
                     children: <Widget>[
                       Center(child: Text('${model.courses.length}')),
                       FlatButton(
-                          child: Text('getDatail'),
+                          child: Text('get Detail'),
                           onPressed: () =>
                               getDetail(context, model.courses[0].id))
                     ],

@@ -14,5 +14,4 @@ class User {
     name = json['name'];
     username = json['username'];
   }
-
 }

@@ -1,5 +1,4 @@
 import 'package:f_202010_provider_get_it/architecture_example/base/base_model.dart';
-import 'package:f_202010_provider_get_it/architecture_example/models/course.dart';
 import 'package:f_202010_provider_get_it/architecture_example/models/course_detail.dart';
 import 'package:f_202010_provider_get_it/architecture_example/services/api.dart';
 

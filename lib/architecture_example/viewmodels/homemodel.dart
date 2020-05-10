@@ -1,8 +1,6 @@
 
 import 'package:f_202010_provider_get_it/architecture_example/base/base_model.dart';
 import 'package:f_202010_provider_get_it/architecture_example/models/course.dart';
-import 'package:f_202010_provider_get_it/architecture_example/models/course_detail.dart';
-import 'package:f_202010_provider_get_it/architecture_example/services/api.dart';
 import 'package:f_202010_provider_get_it/architecture_example/services/couses_service.dart';
 
 import '../locator.dart';
@@ -20,8 +18,7 @@ class HomeModel extends BaseModel {
 
   Future addCourse() async {
     setState(ViewState.Busy);
-    Course course = await _couseService.addCourse();
-    courses.add(course);
+    await _couseService.addCourse();
     setState(ViewState.Idle);
   }
 }
