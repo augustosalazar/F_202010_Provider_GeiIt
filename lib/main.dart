@@ -41,7 +41,7 @@ Widget _buildUi() {
       print("AuthProvider logged ${authProvider.loggedIn}");
       if (authProvider.loggedIn) {
          //return LoginView();
-        return HomeView();
+        return CourseListView();
       } else {
         return LoginView();
       }

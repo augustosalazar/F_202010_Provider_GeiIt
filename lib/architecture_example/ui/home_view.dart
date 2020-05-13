@@ -6,19 +6,14 @@ import 'package:f_202010_provider_get_it/architecture_example/viewmodels/homemod
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class HomeView extends StatelessWidget {
+class CourseListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseView<HomeModel>(
-        onModelReady: (model) => model
-                .getCourses(Provider.of<AuthProvider>(context).username,
-                    Provider.of<AuthProvider>(context).token)
-                .catchError((error) {
-              Provider.of<AuthProvider>(context, listen: false).setLogOut();
-            }),
+        onModelReady: (model) => getData(context, model),
         builder: (context, model, child) => Scaffold(
             appBar: AppBar(
-              title: Text("Home"),
+              title: Text("Course list"),
               actions: <Widget>[
                 IconButton(
                   icon: Icon(Icons.exit_to_app),
@@ -33,16 +28,28 @@ class HomeView extends StatelessWidget {
             body: model.state == ViewState.Busy
                 ? Center(child: CircularProgressIndicator())
                 : Center(
-                    child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Center(child: Text('${model.courses.length}')),
-                      FlatButton(
-                          child: Text('get Detail'),
-                          onPressed: () =>
-                              getDetail(context, model.courses[0].id))
-                    ],
-                  ))));
+                    child: model.courses == null
+                        ? Text('No data')
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              Center(child: Text('${model.courses.length}')),
+                              FlatButton(
+                                  child: Text('get Detail'),
+                                  onPressed: () =>
+                                      getDetail(context, model.courses[0].id))
+                            ],
+                          ))));
+  }
+
+  void getData(BuildContext context, HomeModel model) async {
+    model.getCourses(Provider.of<AuthProvider>(context).username,
+        Provider.of<AuthProvider>(context).token)
+        .catchError((error) async {
+          print("getCourses got error: " + error);
+          await _buildDialog(context, 'Alert', 'Need to login');
+          Provider.of<AuthProvider>(context, listen: false).setLogOut();
+    });
   }
 
   void getDetail(BuildContext context, int courseId) async {
@@ -54,8 +61,37 @@ class HomeView extends StatelessWidget {
 
   Widget floating(BuildContext context, HomeModel model) {
     return FloatingActionButton(
-        onPressed: () => model.addCourse(),
+        onPressed: () => _onAdd(context, model),
         tooltip: 'Add task',
         child: new Icon(Icons.add));
+  }
+
+  void _onAdd(BuildContext context, HomeModel model) async {
+    try {
+      await model.addCourse();
+    } catch (err) {
+      print('upsss ${err.toString()}');
+      await _buildDialog(context, 'Alert', 'Need to login');
+      Provider.of<AuthProvider>(context, listen: false).setLogOut();
+    }
+  }
+
+  Future<void> _buildDialog(BuildContext context, _title, _message) {
+    return showDialog(
+      builder: (context) {
+        return AlertDialog(
+          title: Text(_title),
+          content: Text(_message),
+          actions: <Widget>[
+            FlatButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                })
+          ],
+        );
+      },
+      context: context,
+    );
   }
 }

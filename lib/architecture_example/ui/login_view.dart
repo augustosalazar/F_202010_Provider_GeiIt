@@ -12,7 +12,7 @@ class LoginView extends StatelessWidget {
     return BaseView<LoginModel>(
         builder: (context, model, child) => Scaffold(
             body: 
-           // Provider.of<User>(context, listen: false).logged == true ?  HomeView() :
+           // Provider.of<User>(context, listen: false).logged == true ?  CourseListView() :
             model.state == ViewState.Busy
                 ? Center(child: CircularProgressIndicator())
                 : Center(
@@ -26,5 +26,24 @@ class LoginView extends StatelessWidget {
                         }
                       }),
                 )));
+  }
+
+    Future<void> _buildDialog(BuildContext context, _title, _message) {
+    return showDialog(
+      builder: (context) {
+        return AlertDialog(
+          title: Text(_title),
+          content: Text(_message),
+          actions: <Widget>[
+            FlatButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                })
+          ],
+        );
+      },
+      context: context,
+    );
   }
 }
